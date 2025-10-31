@@ -66,15 +66,22 @@ This demo repository materializes these packs by default:
 | `precommit` | Pre-commit hooks | `.pre-commit-config.yaml` |
 | `dependabot` | Dependabot config | `.github/dependabot.yml` |
 
-## Automated Policy Sync
+## Policy Sync
 
-The repository includes a weekly policy sync workflow that:
+### Automatic Updates
+The repository syncs policies weekly on Sundays at 2 PM UTC via the Policy Sync workflow. This checks for updates from the baseline stable tag and materializes any new policies.
 
-1. Checks if policies are out of sync with baseline
-2. If needed, materializes updated policies
-3. Auto-commits changes directly to main branch
+### Manual Updates
+When baseline policies are updated, the CI check will fail with "Out of sync" status. To sync immediately:
 
-This ensures the repository stays up to date with organization policies without manual intervention.
+Go to Actions tab → Policy Sync workflow → Run workflow
+
+The workflow attempts direct push to main branch but creates a PR if branch protection requires it. Auto-merge is enabled for seamless updates.
+
+### Baseline Update Flow
+The baseline repository follows a validation and promotion process: unstable tag triggers validation, successful validation creates a PR for manual review, merging the PR updates the stable tag, consumer repositories detect changes on next sync.
+
+Consumer repositories like this one sync from the stable tag to ensure only validated policies are applied.
 
 ## Organization Branding (Optional)
 
